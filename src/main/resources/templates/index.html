@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>História Caótica</title>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <div class="coluna esquerda">
+        <h1>História Coletiva</h1>
+        <p class="historia" th:text="${historia}"></p>
+    </div>
+
+    <div class="coluna centro">
+        <h2>Contribuir</h2>
+
+        <p class="erro" th:if="${erro}" th:text="${erro}"></p>
+
+        <form action="/contribute" method="post">
+            <input id="texto" name="texto" oninput="validarPalavras()"
+                   placeholder="Digite até 6 palavras"
+                   type="text">
+
+            <p id="contador"></p>
+
+            <button id="btnEnviar" type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <div class="coluna direita">
+        <h2>Fragmentos</h2>
+
+        <form action="/clear" method="post">
+            <button class="btn-delete" type="submit">
+                Limpar História
+            </button>
+        </form>
+
+        <ul th:if="${#lists.isEmpty(contributions)}">
+            <li>Nada por aqui ainda. Contribua com o primeiro fragmento.</li>
+        </ul>
+
+        <ul th:unless="${#lists.isEmpty(contributions)}">
+            <li th:each="c : ${contributions}">
+                <span th:text="${c.texto}"></span>
+                <small th:text="${#temporals.format(c.data, 'dd MMM yyyy HH:mm')}"></small>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
