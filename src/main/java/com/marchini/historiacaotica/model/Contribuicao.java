@@ -5,7 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-public class Contribution {
+public class Contribuicao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +17,9 @@ public class Contribution {
     @Column(nullable = false, updatable = false)
     private LocalDateTime data;
 
-    public Contribution() {}
+    public Contribuicao() {}
 
-    public Contribution(String texto) {
+    public Contribuicao(String texto) {
         this.texto = texto;
     }
 
@@ -35,7 +35,4 @@ public class Contribution {
         return data;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
-    }
 }

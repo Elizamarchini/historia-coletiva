@@ -68,16 +68,4 @@ li {
     margin-top: 20px;
 }
 
-.btn-delete {
-    background: #f87171;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    width: fit-content;
-    margin-bottom: 15px;
-}
-
 

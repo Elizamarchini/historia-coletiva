@@ -7,50 +7,76 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
-<div class="container">
+    <div class="container">
 
-    <div class="coluna esquerda">
-        <h1>História Coletiva</h1>
-        <p class="historia" th:text="${historia}"></p>
-    </div>
+        <div class="coluna esquerda">
+            <h1>História Coletiva</h1>
+            <p class="historia" th:text="${historia}"></p>
+        </div>
 
     <div class="coluna centro">
         <h2>Contribuir</h2>
 
-        <p class="erro" th:if="${erro}" th:text="${erro}"></p>
+            <p class="erro"
+               th:text="${erro}"
+               th:style="${erro != null} ? 'display:block' : 'display:none'">
+            </p>
 
-        <form action="/contribute" method="post">
-            <input id="texto" name="texto" oninput="validarPalavras()"
-                   placeholder="Digite até 6 palavras"
-                   type="text">
+            <form action="/contribuicao" method="post">
+                <input id="texto" name="texto" oninput="validarPalavras()"
+                       placeholder="Digite até 6 palavras" type="text">
 
             <p id="contador"></p>
 
             <button id="btnEnviar" type="submit">Enviar</button>
         </form>
     </div>
+        <div class="coluna direita">
+            <h2>Fragmentos</h2>
 
-    <div class="coluna direita">
-        <h2>Fragmentos</h2>
+            <ul th:if="${#lists.isEmpty(contributions)}">
+                <li>Nada por aqui ainda. Contribua com o primeiro fragmento.</li>
+            </ul>
 
-        <form action="/clear" method="post">
-            <button class="btn-delete" type="submit">
-                Limpar História
-            </button>
-        </form>
-
-        <ul th:if="${#lists.isEmpty(contributions)}">
-            <li>Nada por aqui ainda. Contribua com o primeiro fragmento.</li>
-        </ul>
-
-        <ul th:unless="${#lists.isEmpty(contributions)}">
-            <li th:each="c : ${contributions}">
-                <span th:text="${c.texto}"></span>
-                <small th:text="${#temporals.format(c.data, 'dd MMM yyyy HH:mm')}"></small>
-            </li>
-        </ul>
+            <ul th:unless="${#lists.isEmpty(contributions)}">
+                <li th:each="c : ${contributions}">
+                    <span th:text="${c.texto}"></span>
+                    <small th:text="${#temporals.format(c.data, 'dd MMM yyyy HH:mm')}"></small>
+                </li>
+            </ul>
+        </div>
     </div>
+    <script>
+        function validarPalavras() {
+            const input = document.getElementById("texto");
+            const botao = document.getElementById("btnEnviar");
+            const contador = document.getElementById("contador");
+            const erro = document.querySelector(".erro");
 
-</div>
+            const texto = input.value.trim();
+            const palavras = texto === "" ? [] : texto.split(/\s+/);
+            const repeticao = /(.)\1{3,}/.test(texto);
+
+            contador.innerText = palavras.length + " palavra(s)";
+            let mensagem = "";
+
+            if (palavras.length < 3 || palavras.length > 6) {
+                mensagem = "O texto deve ter entre 3 e 6 palavras";
+            } else if (repeticao) {
+                mensagem = "Evite repetir o mesmo caractere várias vezes seguidas";
+            }
+
+            if (mensagem !== "") {
+                botao.disabled = true;
+                erro.innerText = mensagem;
+                erro.style.display = "block";
+            } else {
+                botao.disabled = false;
+                erro.innerText = "";
+                erro.style.display = "none";
+            }
+        }
+        document.addEventListener("DOMContentLoaded", validarPalavras);
+    </script>
 </body>
 </html>
