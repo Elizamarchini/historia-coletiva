@@ -1,6 +1,6 @@
 # História Caótica
 
-Aplicação web desenvolvida com Spring Boot que permite a construção colaborativa de uma história, onde cada contribuição é persistida em banco de dados e exibida dinamicamente na interface.
+Aplicação web desenvolvida com Spring Boot que implementa o padrão MVC com persistência em PostgreSQL, permitindo a construção colaborativa de uma história compartilhada.
 
 ---
 
@@ -100,4 +100,11 @@ mvn spring-boot:run
 ### Acessar no navegador
 http://localhost:8080
 
+##  Aprendizados Técnicos
+
+- Implementação do padrão MVC com separação de responsabilidades
+- Persistência com Spring Data JPA e PostgreSQL
+- Configuração manual de datasource
+- Validação da integração aplicação ↔ banco via DBeaver
+- Organização de projeto e documentação no GitHub
 
