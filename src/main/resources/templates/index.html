@@ -1,8 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>História Caótica</title>
     <link href="/css/style.css" rel="stylesheet">
 </head>
@@ -47,19 +46,37 @@
         </div>
     </div>
     <script>
+        // Guarda o erro que veio do servidor ao carregar a página
+        let erroServidor = "";
+
         function validarPalavras() {
             const input = document.getElementById("texto");
             const botao = document.getElementById("btnEnviar");
             const contador = document.getElementById("contador");
             const erro = document.querySelector(".erro");
-
             const texto = input.value.trim();
             const palavras = texto === "" ? [] : texto.split(/\s+/);
             const repeticao = /(.)\1{3,}/.test(texto);
 
             contador.innerText = palavras.length + " palavra(s)";
-            let mensagem = "";
 
+            if (texto === "") {
+                botao.disabled = true;
+                // Se havia erro do servidor, mantém ele visível
+                if (erroServidor) {
+                    erro.innerText = erroServidor;
+                    erro.style.display = "block";
+                } else {
+                    erro.innerText = "";
+                    erro.style.display = "none";
+                }
+                return;
+            }
+
+            // Assim que o usuário começa a digitar, o erro do servidor não é mais relevante
+            erroServidor = "";
+
+            let mensagem = "";
             if (palavras.length < 3 || palavras.length > 6) {
                 mensagem = "O texto deve ter entre 3 e 6 palavras";
             } else if (repeticao) {
@@ -76,7 +93,20 @@
                 erro.style.display = "none";
             }
         }
-        document.addEventListener("DOMContentLoaded", validarPalavras);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const contador = document.getElementById("contador");
+            const botao = document.getElementById("btnEnviar");
+            const erro = document.querySelector(".erro");
+
+            contador.innerText = "0 palavra(s)";
+            botao.disabled = true;
+
+            //  Captura o erro do servidor (se houver) antes de qualquer interação
+            if (erro && erro.style.display === "block") {
+                erroServidor = erro.innerText;
+            }
+        });
     </script>
 </body>
 </html>

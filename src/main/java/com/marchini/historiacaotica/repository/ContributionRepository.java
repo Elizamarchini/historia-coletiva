@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface ContributionRepository extends JpaRepository<Contribuicao, Long> {
     List<Contribuicao> findAllByOrderByDataAsc();
-    void deleteAll();
 }
